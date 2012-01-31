@@ -27,7 +27,7 @@ args = parser.parse_args()
 
 now = datetime.now()
 
-project = args.prject
+project = args.project
 vars = {
     'project': args.project,
     'pypiproject': args.project[7:] if args.project.startswith('python-')
@@ -61,6 +61,8 @@ templates = chain(glob(templates_dir + '/*'),
                   glob(templates_dir + args.type + '/*'))
 
 for template_filepath in templates:
+    if os.path.isdir(template_filepath):
+        continue
     with open(template_filepath) as f:
         template_string = f.read()
         rendered = template_string % vars
