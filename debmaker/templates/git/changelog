@@ -1,0 +1,6 @@
+%(project)s (%(version)s-%(date)s.%(hash)s-yandex1) unstable; urgency=low
+
+  * Initial release 
+
+ -- %(name)s <%(email)s>  %(isodate)s
+

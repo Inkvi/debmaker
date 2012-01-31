@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+DEB_PYTHON_SYSTEM = pycentral
+DEB_COMPRESS_EXCLUDE = .py
+GIT_REPO = git://github.com/%(repopath)s.git
+GIT_CLONE_DIR = /tmp/%(project)s
+CLEAN_FILES = .gitignore
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+include /usr/share/cdbs/1/rules/git.mk
+
+clean::
+	rm -f *.cdbs-config_list # should be done in buildcore.mk but is not
+
