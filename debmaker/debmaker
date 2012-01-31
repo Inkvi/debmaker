@@ -28,15 +28,18 @@ args = parser.parse_args()
 now = datetime.now()
 
 project = args.project
+version = args.version
+
+if args.type == 'git':
+    version = "%s-%s.%s" % (args.version, now.strftime('%Y%m%d'), args.hash)
+
 vars = {
     'project': args.project,
     'pypiproject': args.project[7:] if args.project.startswith('python-')
     else project,
     'version': args.version,
-    'hash': args.hash,
     'name': args.name,
     'email': args.email,
-    'date': now.strftime('%Y%m%d'),
     'isodate': now.strftime('%a, %d %b %Y %H:%M:%S +0400'),
     'repopath': args.repopath
 }

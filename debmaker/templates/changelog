@@ -1,4 +1,4 @@
-%(project)s (%(version)s-%(date)s.%(hash)s-yandex1) unstable; urgency=low
+%(project)s (%(version)s-yandex1) unstable; urgency=low
 
   * Initial release 
 
