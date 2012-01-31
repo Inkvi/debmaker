@@ -1,0 +1,5 @@
+debmaker is a tool for generating minimal set of debian files for creating debian package using debuild.
+
+Example of usage:
+debmake --project python-debmaker --version 0.4 --hash ea7e60b87a
+--name "Ivan Ivanov" --email ivan@yandex.ru --repopath inkvi/debmaker

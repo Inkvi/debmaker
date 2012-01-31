@@ -7,6 +7,7 @@ from glob import glob
 import os
 from posix import W_OK
 import sys
+import debmaker
 
 parser = argparse.ArgumentParser(description='Generating debian files')
 parser.add_argument('--project', required=True)
@@ -19,9 +20,6 @@ parser.add_argument('--o', default=os.getcwdu())
 parser.add_argument('--type', default='git', choices=['git', 'pypi'])
 
 args = parser.parse_args()
-
-templates_dir = os.path.abspath(
-    os.path.dirname(__file__)) + '/templates/' + args.type
 
 now = datetime.now()
 
@@ -45,7 +43,15 @@ output_dir = args.o + '/debian/'
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
 
+templates_dir = os.path.abspath(
+    os.path.dirname(debmaker.__file__)) + '/templates/' + args.type
+
+if not os.path.exists(templates_dir):
+    print 'Cannot find folder with templates %s' % templates_dir
+    sys.exit(1)
+
 for template_filepath in glob(templates_dir + '/*'):
+    print template_filepath
     with open(template_filepath) as f:
         template_string = f.read()
         rendered = template_string % vars
