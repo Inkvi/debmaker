@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from itertools import chain
 
 import argparse
 from datetime import time, datetime
@@ -10,21 +11,27 @@ import sys
 import debmaker
 
 parser = argparse.ArgumentParser(description='Generating debian files')
-parser.add_argument('--project', required=True)
-parser.add_argument('--version', required=True)
-parser.add_argument('--hash')
-parser.add_argument('--name', required=True)
-parser.add_argument('--email', required=True)
-parser.add_argument('--repopath')
-parser.add_argument('--o', default=os.getcwdu())
+parser.add_argument('--project', required=True, help='Project name')
+parser.add_argument('--version', required=True, help='Project version')
+parser.add_argument('--hash', help="First 8 letters of commit hash")
+parser.add_argument('--name', required=True, help='Maintainer name')
+parser.add_argument('--email', required=True, help='Maintainer email')
+parser.add_argument('--repopath',
+                    help="""Repository subpath.
+                    For git://github.com/inkvi/debmaker.git subpath is inkvi/debmaker""")
+parser.add_argument('--o', default=os.getcwdu(),
+                    help='Output directory. Default is cwd')
 parser.add_argument('--type', default='git', choices=['git', 'pypi'])
 
 args = parser.parse_args()
 
 now = datetime.now()
 
+project = args.prject
 vars = {
     'project': args.project,
+    'pypiproject': args.project[7:] if args.project.startswith('python-')
+    else project,
     'version': args.version,
     'hash': args.hash,
     'name': args.name,
@@ -44,14 +51,16 @@ if not os.path.exists(output_dir):
     os.mkdir(output_dir)
 
 templates_dir = os.path.abspath(
-    os.path.dirname(debmaker.__file__)) + '/templates/' + args.type
+    os.path.dirname(debmaker.__file__)) + '/templates/'
 
 if not os.path.exists(templates_dir):
     print 'Cannot find folder with templates %s' % templates_dir
     sys.exit(1)
 
-for template_filepath in glob(templates_dir + '/*'):
-    print template_filepath
+templates = chain(glob(templates_dir + '/*'),
+                  glob(templates_dir + args.type + '/*'))
+
+for template_filepath in templates:
     with open(template_filepath) as f:
         template_string = f.read()
         rendered = template_string % vars
