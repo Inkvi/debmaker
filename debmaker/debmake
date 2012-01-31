@@ -40,7 +40,7 @@ if not os.access(output_dir, W_OK):
     print 'Not enough permission to write in %s' % os.path.abspath(output_dir)
     sys.exit(1)
 
-output_dir = '/debian/'
+output_dir = args.o + '/debian/'
 
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
